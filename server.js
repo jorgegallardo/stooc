@@ -1,9 +1,20 @@
 const express = require('express');
-const app = express();
+const mongoose = require('mongoose');
 
-app.get('/', (req, res) => {
-  res.send('yoyoyo');
-});
+const app = express();
+const db = require('./config/keys').mongoURI;
+
+mongoose
+  .connect(
+    db,
+    { useNewUrlParser: true }
+  )
+  .then(() => {
+    console.log('Mongo DB connected.');
+  })
+  .catch(() => console.log('Failed to connect to database.'));
+
+app.get('/', (req, res) => res.send('yoo'));
 
 app.listen(3000, () => {
   console.log('Server started on port 3000.');

@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const jwt = require('jsonwebtoken');
 const keys = require('../../config/keys');
+const passport = require('passport');
 
 //load Teacher model
 const Teacher = require('../../models/Teacher');
@@ -67,6 +68,18 @@ router.post('/login', (req, res) => {
     });
   });
 });
+
+//@route        GET api/auth/current
+//@description  return current user (whoever the token belongs to)
+//@access       private
+router.get(
+  '/current',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    const { id, firstName, lastName, email } = req.user;
+    res.json({ id, firstName, lastName, email });
+  }
+);
 
 //@route        GET api/auth/test
 //@description  tests auth route

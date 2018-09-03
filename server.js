@@ -2,9 +2,14 @@ const express = require('express');
 const mongoose = require('mongoose');
 const auth = require('./routes/api/auth');
 const dashboard = require('./routes/api/dashboard');
+const bodyParser = require('body-parser');
 
 const app = express();
 const db = require('./config/keys').mongoURI;
+
+//body parser middleware
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 mongoose
   .connect(

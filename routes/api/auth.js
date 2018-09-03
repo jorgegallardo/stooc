@@ -1,6 +1,8 @@
 //anything having to do with registering, login, authentication, form validations
 const express = require('express');
 const router = express.Router();
+var bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 //load Teacher model
 const Teacher = require('../../models/Teacher');
@@ -17,16 +19,21 @@ router.post('/register', (req, res) => {
     } else {
       const { name, email, password } = req.body;
       const newTeacher = new Teacher({ name, email, password });
-      //mongoose async operations (save) return es6 promises
-      newTeacher
-        .save()
-        .then(teacher => {
-          console.log(`Created teacher:\n ${teacher}.`);
-          res.json(teacher);
-        })
-        .catch(err => {
-          res.status(400).json(err);
-        });
+
+      bcrypt.hash(password, saltRounds, (err, hash) => {
+        if (err) throw err;
+        newTeacher.password = hash;
+        //mongoose async operations (save) return es6 promises
+        newTeacher
+          .save()
+          .then(teacher => {
+            console.log(`Created teacher:\n ${teacher}.`);
+            res.json(teacher);
+          })
+          .catch(err => {
+            res.status(400).json(err);
+          });
+      });
     }
   });
 });

@@ -1,13 +1,15 @@
 //anything having to do with registering, login, authentication, form validations
 const express = require('express');
 const router = express.Router();
-var bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt');
 const saltRounds = 10;
+const jwt = require('jsonwebtoken');
+const keys = require('../../config/keys');
 
 //load Teacher model
 const Teacher = require('../../models/Teacher');
 
-//@route        GET api/auth/register
+//@route        POST api/auth/register
 //@description  registers a new user in the db
 //@access       public
 router.post('/register', (req, res) => {
@@ -35,6 +37,34 @@ router.post('/register', (req, res) => {
           });
       });
     }
+  });
+});
+
+//@route        POST api/auth/register
+//@description  user login (return JWT)
+//@access       public
+router.post('/login', (req, res) => {
+  //user will send a form with an email and a password, login has to find user by email, then compare password in request to the encrypted password, and if they match, send the jwt
+  const { email, password } = req.body;
+  Teacher.findOne({ email }).then(teacher => {
+    if (!teacher) return res.status(404).json({ email: 'Teacher not found.' });
+
+    bcrypt.compare(password, teacher.password).then(passwordsMatch => {
+      if (passwordsMatch) {
+        //res.send({ password: 'Successful match.' });
+        const payload = { id: teacher.id, firstName: teacher.firstName };
+
+        //payload is the user info we want to include in the token
+        jwt.sign(
+          payload,
+          keys.secretOrPrivateKey,
+          { expiresIn: 3600 },
+          (err, token) => {
+            res.json({ success: true, token: `Bearer ${token}` });
+          }
+        );
+      } else return res.status(400).json({ password: 'Incorrect password.' });
+    });
   });
 });
 

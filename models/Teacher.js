@@ -3,9 +3,10 @@ const Schema = mongoose.Schema;
 
 //Teacher Schema
 const TeacherSchema = new Schema({
-  name: { type: String, required: true },
-  email: { type: String, required: true },
-  password: { type: String, required: true }
+  firstName: { type: String, required: true, trim: true, minlength: 2 },
+  lastName: { type: String, required: true, trim: true, minlength: 2 },
+  email: { type: String, required: true, trim: true },
+  password: { type: String, required: true, trim: true }
 });
 
 module.exports = mongoose.model('Teacher', TeacherSchema);

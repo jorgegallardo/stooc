@@ -17,8 +17,8 @@ router.post('/register', (req, res) => {
     if (teacher) {
       return res.status(400).json({ email: 'Email already exists.' });
     } else {
-      const { name, email, password } = req.body;
-      const newTeacher = new Teacher({ name, email, password });
+      const { firstName, lastName, email, password } = req.body;
+      const newTeacher = new Teacher({ firstName, lastName, email, password });
 
       bcrypt.hash(password, saltRounds, (err, hash) => {
         if (err) throw err;

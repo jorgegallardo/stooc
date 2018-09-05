@@ -1,42 +1,31 @@
 import React, { Component } from 'react';
 
 class Sidebar extends Component {
+  constructor(props) {
+    super(props);
+    this.classesTaught = [
+      { period: 1, title: 'Living Environment', section: 2 },
+      { period: 2, title: 'Living Environment', section: 4 },
+      { period: 3, title: 'Living Environment', section: 6 },
+      { period: 4, title: 'Living Environment', section: 8 },
+      { period: 5, title: 'Living Environment', section: 10 }
+    ];
+  }
   render() {
     return (
       <div>
         <nav className="col-md-2 d-none d-md-block bg-light sidebar">
           <div className="sidebar-sticky">
             <ul className="nav flex-column">
-              <li className="nav-item">
-                <a className="nav-link" href="#">
-                  All Sections
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#">
-                  Period 1: Living Environment 02
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link active" href="#">
-                  Period 2: Living Environment 04
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#">
-                  Period 3: Living Environment 05
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#">
-                  Period 4: Living Environment 09
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#">
-                  Period 5: Living Environment 12
-                </a>
-              </li>
+              {this.classesTaught.map(course => {
+                return (
+                  <li className="nav-item">
+                    <a className="nav-link" href="#">
+                      Period {course.period}: {course.title} {course.section}
+                    </a>
+                  </li>
+                );
+              })}
             </ul>
 
             <h6 className="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
